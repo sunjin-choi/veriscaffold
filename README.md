@@ -1,7 +1,7 @@
 # veriscaffold
 scaffolding systemverilog-based projects
 
-# TODO
+## TODO
 - [ ] folder structure
 - [ ] verible linting actions
 - [ ] verible formatting pre-commit hooks
@@ -12,5 +12,5 @@ scaffolding systemverilog-based projects
 - [ ] simple systemverilog design + testing examples in cocotb
 - [ ] auto-instantiation
 
-# Features Awaiting
+## Features Awaiting
 - Verilator UVM support is coming along...
