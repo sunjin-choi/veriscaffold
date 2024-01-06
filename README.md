@@ -2,7 +2,7 @@
 scaffolding systemverilog-based projects
 
 # TODO
-[ ] folder structure
+[] folder structure
 [ ] verible linting actions
 [ ] verible formatting pre-commit hooks
 [ ] verilator-based naming convention checks
