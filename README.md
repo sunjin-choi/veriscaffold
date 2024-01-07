@@ -11,6 +11,7 @@ scaffolding systemverilog-based projects
 - [ ] simple systemverilog desing + testing examples in verilator
 - [ ] simple systemverilog design + testing examples in cocotb
 - [ ] functional unit testing framework
+- [ ] synthesizability check using proprietary tool e.g., Cadence, Synopsys
 - [ ] auto-instantiation
 
 ## Features Awaiting
