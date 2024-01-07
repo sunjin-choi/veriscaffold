@@ -10,6 +10,7 @@ scaffolding systemverilog-based projects
 - [ ] simple systemverilog design + testing examples in icarus verilog
 - [ ] simple systemverilog desing + testing examples in verilator
 - [ ] simple systemverilog design + testing examples in cocotb
+- [ ] functional unit testing framework
 - [ ] auto-instantiation
 
 ## Features Awaiting
