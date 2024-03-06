@@ -19,5 +19,5 @@ scaffolding systemverilog-based projects
 
 ## Note
 - `rules_verilator` doesn't work in macOS ([Link](https://github.com/bazelbuild/bazel/issues/18183))
-
+- verilator-gtest integration ([Link](https://github.com/mortenjc/systemverilog))
 
