@@ -15,3 +15,8 @@ scaffolding systemverilog-based projects
 
 ## Features Awaiting
 - Verilator UVM support is coming along...
+
+## Note
+- `rules_verilator` doesn't work in macOS ([Link](https://github.com/bazelbuild/bazel/issues/18183))
+
+
