@@ -1,0 +1,9 @@
+
+# cpp/verilator build
+build
+
+# verible
+verible.filelist
+
+# clangd
+.cache
