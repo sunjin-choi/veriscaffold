@@ -17,15 +17,14 @@ if (NOT verilator_FOUND)
   message(FATAL_ERROR "Verilator was not found. Either install it, or set the VERILATOR_ROOT environment variable")
 endif()
 
-add_executable(hello_world ./test/hello_world/tb_hello.cpp)
-add_executable(example ./test/counter/tb_counter_inst.cpp)
-
+add_executable(hello_world ./test/hello_world/test_hello.cpp)
 verilate(hello_world
 	INCLUDE_DIRS "./test/hello_world/Makefile"
 	SOURCES ./src/hello_world/hello.sv
 )
 
-verilate(example
+add_executable(test_counter_inst ./test/counter/test_counter_inst.cpp)
+verilate(test_counter_inst
 	INCLUDE_DIRS "./test/counter/Makefile"
 	SOURCES ./src/counter/counter.sv
 )
