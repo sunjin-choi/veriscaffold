@@ -17,33 +17,61 @@ if (NOT verilator_FOUND)
   message(FATAL_ERROR "Verilator was not found. Either install it, or set the VERILATOR_ROOT environment variable")
 endif()
 
+# TODO: add if/else for the environment variables
+set(VERILOG_SRC_DIR $ENV{VERILOG_SRC_DIR} CACHE PATH "Path to the verilog source directory")
+set(VERILOG_LIB_DIR $ENV{VERILOG_LIB_DIR} CACHE PATH "Path to the verilog library directory")
+set(VERILOG_TEST_DIR $ENV{VERILOG_TEST_DIR} CACHE PATH "Path to the verilog test directory")
+
+message(STATUS "Verilog source directory: ${VERILOG_SRC_DIR}")
+message(STATUS "Verilog library directory: ${VERILOG_LIB_DIR}")
+message(STATUS "Verilog test directory: ${VERILOG_TEST_DIR}")
+
 list(APPEND VERI_ARGS -Wall -Wno-fatal -sv --cc)
 
+set(GTKWAVE_APP $ENV{GTKWAVE_APP} CACHE PATH "Path to gtkwave executable")
+set(WAVEFORM_FILE $ENV{WAVEFORM_FILE} CACHE PATH "Path to the waveform file")
 
-add_executable(hello_world ./test/hello_world/test_hello.cpp)
-verilate(hello_world
-	#INCLUDE_DIRS "./test/hello_world/Makefile"
-	SOURCES ./src/hello_world/hello.sv
-	VERILATOR_ARGS ${VERI_ARGS}
-	TOP_MODULE hello
-)
+#message(STATUS "GTKWave application: ${GTKWAVE_APP}")
+message(STATUS "Waveform file: ${WAVEFORM_FILE}")
 
-add_executable(test_counter_inst ./test/counter/test_counter_inst.cpp)
-verilate(test_counter_inst
-	#TRACE
-	#INCLUDE_DIRS "./test/counter/Makefile"
-	SOURCES ./src/counter/counter.sv
-	VERILATOR_ARGS ${VERI_ARGS}
-	TOP_MODULE counter
-)
+add_subdirectory(test)
 
-add_executable(tb_counter ./test/counter/tb_counter.cpp)
-verilate(tb_counter
-	TRACE
-	#INCLUDE_DIRS "./test/counter/Makefile"
-	SOURCES ./src/counter/counter.sv
-	VERILATOR_ARGS ${VERI_ARGS}
-	TOP_MODULE counter
-)
+## TODO: refactor this into config.cmake?
+#add_custom_target(wave
+#    COMMAND gtkwave ${WAVEFORM}
+#    #DEPENDS ${WAVEFORM}
+#    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#)
+#add_custom_command(
+#    TARGET wave
+#    POST_BUILD
+#    COMMAND ${GTKWAVE_APP} ${WAVEFORM}
+#)
+
+#add_executable(hello_world ./test/hello_world/test_hello.cpp)
+#verilate(hello_world
+#    #INCLUDE_DIRS "./test/hello_world/Makefile"
+#    SOURCES ./src/hello_world/hello.sv
+#    VERILATOR_ARGS ${VERI_ARGS}
+#    TOP_MODULE hello
+#)
+#
+#add_executable(test_counter_inst ./test/counter/test_counter_inst.cpp)
+#verilate(test_counter_inst
+#    #TRACE
+#    #INCLUDE_DIRS "./test/counter/Makefile"
+#    SOURCES ./src/counter/counter.sv
+#    VERILATOR_ARGS ${VERI_ARGS}
+#    TOP_MODULE counter
+#)
+#
+#add_executable(tb_counter ./test/counter/tb_counter.cpp)
+#verilate(tb_counter
+#    TRACE
+#    #INCLUDE_DIRS "./test/counter/Makefile"
+#    SOURCES ./src/counter/counter.sv
+#    VERILATOR_ARGS ${VERI_ARGS}
+#    TOP_MODULE counter
+#)
 
 # TODO: GLOB_RECURSE to add the library later
