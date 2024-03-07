@@ -8,3 +8,6 @@ verible.filelist
 
 # clangd
 .cache
+
+# vim
+.sw*
