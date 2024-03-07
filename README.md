@@ -20,4 +20,4 @@ scaffolding systemverilog-based projects
 ## Note
 - `rules_verilator` doesn't work in macOS ([Link](https://github.com/bazelbuild/bazel/issues/18183))
 - verilator-gtest integration ([Link](https://github.com/mortenjc/systemverilog))
-
+- check this link for cmake sophistication ([Link](https://github.com/antmicro/renode-verilator-integration/blob/master/cmake/configure-and-verilate.cmake))
