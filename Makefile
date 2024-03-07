@@ -5,19 +5,21 @@ run:
 
 	@echo
 	@echo "-- VERILATE ----------------"
-	mkdir -p build && cd build && cmake ..
+	mkdir -p sim && cd sim && cmake ..
 
 	@echo
 	@echo "-- BUILD -------------------"
-	cmake --build build -j4
+	cmake --build sim -j4
+	if [ -f compile_commands.json ]; then rm compile_commands.json; fi
+	ln -s sim/compile_commands.json .
 
 	@echo
 	@echo "-- RUN ---------------------"
-	build/hello_world
+	sim/test/hello_world/hello_world
 
 	@echo
 	@echo "-- DONE --------------------"
 	@echo
 
 clean mostlyclean distclean maintainer-clean:
-	@rm -rf build logs
+	@rm -rf sim logs
