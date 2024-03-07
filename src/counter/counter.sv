@@ -1,6 +1,11 @@
 // Simple counter
 //
 
+// timescale
+`timescale 1ns / 1ps
+// default nettype set to none
+`default_nettype none
+
 module counter (
     input var logic clk,
     input var logic rst_n,
@@ -23,3 +28,5 @@ module counter (
    *end*/
 
 endmodule
+
+`default_nettype wire

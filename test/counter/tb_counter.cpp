@@ -1,12 +1,16 @@
+// See this example for improvement:
+// https://github.com/antmicro/verilator/blob/master/examples/make_tracing_c/sim_main.cpp
 
 #include "Vcounter.h"
+#include <cstdint>
 #include <cstdlib>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 
-#define WAVEFORM_FILE WAVEFORM_FILE
+#define WAVEFORM_FILE "WAVEFORM_FILE"
 #define MAX_SIM_TIME 10
-vluint64_t sim_time = 0;
+
+/*vluint64_t sim_time = 0;*/
 
 int main(int argc, char **argv) {
 
@@ -17,6 +21,10 @@ int main(int argc, char **argv) {
   Verilated::traceEverOn(true);
   VerilatedVcdC *tracep = new VerilatedVcdC;
 
+  // Default does not work out -- manually set time unit and resolution
+  tracep->set_time_unit("ns");
+  tracep->set_time_resolution("ps");
+
   // Pass arguments so Verilated code can see them, e.g. $value$plusargs
   // This needs to be called before you create any model
   contextp->commandArgs(argc, argv);
@@ -26,33 +34,30 @@ int main(int argc, char **argv) {
 
   // Connect counter to trace
   counter->trace(tracep, 99);
-  /*tracep->open("waveform.vcd");*/
-  tracep->open(getenv("WAVEFORM_FILE"));
+  tracep->open(getenv(WAVEFORM_FILE));
 
-  /*  // Simulate until $finish
-   *  while (!contextp->gotFinish()) {
-   *    // Evaluate model
-   *    counter->eval();
-   *  }
-   *
-   *  // Final model cleanup
-   *  counter->final();*/
+  /*printf("timeprecision: %d\n", contextp->timeprecision());*/
 
-  while (sim_time < MAX_SIM_TIME) {
-    if (sim_time == 0) {
-      // Initial clock
-      counter->clk = 0;
-    } else if (sim_time == 1) {
-      // Reset
-      counter->rst_n = 0;
-      counter->clk = 1;
-    } else {
-      counter->clk ^= 1;
+  // Initialize
+  counter->clk = 0;
+  counter->rst_n = 0;
+  counter->en = 0;
+
+  // Simulate until $finish or MAX_SIM_TIME
+  while (contextp->time() < MAX_SIM_TIME && !contextp->gotFinish()) {
+    counter->clk = !counter->clk;
+
+    if (contextp->time() == 1) {
+      counter->rst_n = 1;
+      counter->en = 1;
     }
 
+    // Evaluate model
     counter->eval();
-    tracep->dump(sim_time);
-    sim_time += 1;
+
+    contextp->timeInc(1);
+    tracep->dump(contextp->time());
+    /*printf("sim time: %llu\n", contextp->time());*/
   }
 
   // Destroy model

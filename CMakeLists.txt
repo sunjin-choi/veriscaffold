@@ -26,7 +26,8 @@ message(STATUS "Verilog source directory: ${VERILOG_SRC_DIR}")
 message(STATUS "Verilog library directory: ${VERILOG_LIB_DIR}")
 message(STATUS "Verilog test directory: ${VERILOG_TEST_DIR}")
 
-list(APPEND VERI_ARGS -Wall -Wno-fatal -sv --cc)
+list(APPEND VERI_ARGS -Wall -Wno-fatal -sv --cc --timescale "1ns/1ps")
+#list(APPEND VERI_ARGS -Wall -Wno-fatal -Wno-TIMESCALEMOD -sv --cc --timescale 1ns/1ps)
 
 set(GTKWAVE_APP $ENV{GTKWAVE_APP} CACHE PATH "Path to gtkwave executable")
 set(WAVEFORM_FILE $ENV{WAVEFORM_FILE} CACHE PATH "Path to the waveform file")
@@ -35,6 +36,8 @@ set(WAVEFORM_FILE $ENV{WAVEFORM_FILE} CACHE PATH "Path to the waveform file")
 message(STATUS "Waveform file: ${WAVEFORM_FILE}")
 
 add_subdirectory(test)
+
+# TODO: GLOB_RECURSE to add the library later
 
 ## TODO: refactor this into config.cmake?
 #add_custom_target(wave
@@ -74,4 +77,3 @@ add_subdirectory(test)
 #    TOP_MODULE counter
 #)
 
-# TODO: GLOB_RECURSE to add the library later
