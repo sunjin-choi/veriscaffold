@@ -13,7 +13,7 @@ run:
 
 	@echo
 	@echo "-- RUN ---------------------"
-	build/example
+	build/hello_world
 
 	@echo
 	@echo "-- DONE --------------------"
