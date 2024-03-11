@@ -1,7 +1,7 @@
 
 # cpp/verilator build
 build*
-sim*
+#sim*
 
 # verible
 verible.filelist
