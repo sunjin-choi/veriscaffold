@@ -1,14 +1,14 @@
 // See this example for improvement:
 // https://github.com/antmicro/verilator/blob/master/examples/make_tracing_c/sim_main.cpp
 
-#include "Vcounter.h"
+#include "Vaccumulator.h"
 #include <cstdint>
 #include <cstdlib>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 
 #define WAVEFORM_FILE "WAVEFORM_FILE"
-#define MAX_SIM_TIME 10
+#define MAX_SIM_TIME 15
 
 /*vluint64_t sim_time = 0;*/
 
@@ -30,30 +30,38 @@ int main(int argc, char **argv) {
   contextp->commandArgs(argc, argv);
 
   // Construct the Verilated model, from Vcounter.h generated from Verilating
-  Vcounter *const counter = new Vcounter{contextp};
+  Vaccumulator *const acc = new Vaccumulator{contextp};
 
-  // Connect counter to trace
-  counter->trace(tracep, 99);
+  // Connect accumulator to trace
+  acc->trace(tracep, 99);
   tracep->open(getenv(WAVEFORM_FILE));
 
-  /*printf("timeprecision: %d\n", contextp->timeprecision());*/
-
   // Initialize
-  counter->clk = 0;
-  counter->rst_n = 0;
-  counter->en = 0;
+  acc->clk = 0;
+  acc->rst_n = 1;
+  acc->i_en = 0;
+  acc->data_in = 0;
 
   // Simulate until $finish or MAX_SIM_TIME
   while (contextp->time() < MAX_SIM_TIME && !contextp->gotFinish()) {
-    counter->clk = !counter->clk;
+    acc->clk = !acc->clk;
 
     if (contextp->time() == 1) {
-      counter->rst_n = 1;
-      counter->en = 1;
+      acc->rst_n = 0;
+      acc->i_en = 1;
+      acc->data_in = 0;
+    } else if (contextp->time() >= 2 && contextp->time() <= 10) {
+      acc->rst_n = 1;
+      acc->i_en = 1;
+      acc->data_in = 1;
+    } else {
+      acc->rst_n = 1;
+      acc->i_en = 0;
+      acc->data_in = 1;
     }
 
     // Evaluate model
-    counter->eval();
+    acc->eval();
 
     contextp->timeInc(1);
     tracep->dump(contextp->time());
@@ -63,7 +71,7 @@ int main(int argc, char **argv) {
   // Destroy model
   tracep->close();
   delete tracep;
-  delete counter;
+  delete acc;
 
   // Return good completion status
   return 0;

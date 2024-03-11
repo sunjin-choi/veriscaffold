@@ -7,7 +7,8 @@ USE_BAZEL_VERSION=6.2.0
 
 export VERILOG_SRC_DIR=$PWD/src
 export VERILOG_LIB_DIR=$PWD/lib
-export VERILOG_TEST_DIR=$PWD/test
+export VERILOG_TEST_DIR=$PWD/tests
+export VERILOG_SIM_DIR=$PWD/sim
 
 export GTKWAVE_APP=/Applications/gtkwave.app/Contents/Resources/bin/gtkwave
 export WAVEFORM_FILE="waveform.vcd"
