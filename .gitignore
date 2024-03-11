@@ -11,5 +11,5 @@ verible.filelist
 compile_commands.json
 
 # vim
-.sw*
+*.sw*
 
