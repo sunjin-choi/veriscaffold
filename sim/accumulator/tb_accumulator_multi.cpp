@@ -1,14 +1,14 @@
 // See this example for improvement:
 // https://github.com/antmicro/verilator/blob/master/examples/make_tracing_c/sim_main.cpp
 
-#include "Vaccumulator.h"
+#include "Vaccumulator_multi.h"
 #include <cstdint>
 #include <cstdlib>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 
 #define WAVEFORM_FILE "WAVEFORM_FILE"
-#define MAX_SIM_TIME 15
+#define MAX_SIM_TIME 20
 
 /*vluint64_t sim_time = 0;*/
 
@@ -32,12 +32,12 @@ accumulator_bfm_state_t accBfmInputState = {1, 0};
 accumulator_bfm_state_t accBfmOutputState = {0, 1};
 accumulator_bfm_state_t accBfmInOutState = {1, 1};
 
-void accStateUpdate(Vaccumulator *acc, const accumulator_state_t *state) {
+void accStateUpdate(Vaccumulator_multi *acc, const accumulator_state_t *state) {
   acc->rst_n = state->rst_n;
   acc->i_en = state->i_en;
 }
 
-void accBfmStateUpdate(Vaccumulator *acc,
+void accBfmStateUpdate(Vaccumulator_multi *acc,
                        const accumulator_bfm_state_t *state) {
   acc->i_rdy = state->i_rdy;
   acc->i_val = state->i_val;
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
   contextp->commandArgs(argc, argv);
 
   // Construct the Verilated model, from Vcounter.h generated from Verilating
-  Vaccumulator *const acc = new Vaccumulator{contextp};
+  Vaccumulator_multi *const acc = new Vaccumulator_multi{contextp};
 
   // Connect accumulator to trace
   acc->trace(tracep, 99);
@@ -82,12 +82,19 @@ int main(int argc, char **argv) {
       acc->data_in = 0;
     } else if (contextp->time() >= 2 && contextp->time() <= 10) {
       accStateUpdate(acc, &accEnableState);
-      accBfmStateUpdate(acc, &accBfmInputState);
+      accBfmStateUpdate(acc, &accBfmInOutState);
       acc->data_in = 1;
+      acc->i_sel = 0;
+    } else if (contextp->time() > 10 && contextp->time() <= 15) {
+      accStateUpdate(acc, &accEnableState);
+      accBfmStateUpdate(acc, &accBfmInOutState);
+      acc->data_in = 1;
+      acc->i_sel = 1;
     } else {
       accStateUpdate(acc, &accDisableState);
-      accBfmStateUpdate(acc, &accBfmOutputState);
-      acc->data_in = 1;
+      accBfmStateUpdate(acc, &accBfmInOutState);
+      acc->data_in = 0;
+      acc->i_sel = 0;
     }
 
     // Evaluate model

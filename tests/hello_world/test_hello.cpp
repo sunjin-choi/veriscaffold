@@ -1,5 +1,5 @@
 
-#include "Vhello.h"
+#include "Vhello_world.h"
 #include <verilated.h>
 
 int main() {
@@ -8,7 +8,7 @@ int main() {
 
   // Construct the Verilated model, from Vhello.h generated from Verilating
   // "hello.sv"
-  Vhello *const hello = new Vhello;
+  Vhello_world *const hello = new Vhello_world;
 
   // Evaluate the model
   hello->eval();

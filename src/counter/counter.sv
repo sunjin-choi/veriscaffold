@@ -21,12 +21,8 @@ module counter (
       count <= count + 1;
     end
   end
-
-  /*initial begin
-   *  $display("Hello from counter");
-   *  $finish;
-   *end*/
-
-endmodule
+endmodule  
 
 `default_nettype wire
+
+
